@@ -1,0 +1,23 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  getUser(id: String): UserResponse
+}
+
+type Mutation {
+  createUser(user: User!): UserResponse
+}
+
+type UserResponse {
+  success: Boolean!
+  data: User
+  error: String
+}
+
+type User {
+  id: String!
+  name: String!
+}

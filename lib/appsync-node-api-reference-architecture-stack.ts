@@ -1,16 +1,27 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as cdk from "aws-cdk-lib";
+import {
+  AuthorizationType,
+  Definition,
+  GraphqlApi,
+} from "aws-cdk-lib/aws-appsync";
+import { Construct } from "constructs";
+import path = require("path");
+import { AppSyncAPI } from "./appsync";
+import { DynamoDBTable } from "./dynamodb";
+
+const apiName = "my-api";
+const tableName = "my-table";
 
 export class AppsyncNodeApiReferenceArchitectureStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    const api = new AppSyncAPI(this, "appsync-api", {
+      apiNameName: apiName,
+    });
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'AppsyncNodeApiReferenceArchitectureQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    const dynamodbTable = new DynamoDBTable(this, "dynamodb-table", {
+      tableName: tableName,
+    });
   }
 }
