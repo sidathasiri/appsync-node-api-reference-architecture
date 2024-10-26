@@ -31,12 +31,12 @@ jobs:
 
       - name: Build
         id: build
-        run: npm run build
+        run: ./scripts/build.sh
         env:
           ENV: DEV
 
       - name: Deploy
         id: deploy
-        run: npx cdk@2.164.1 deploy --require-approval never
+        run: ./scripts/deploy.sh
         env:
           ENV: DEV
