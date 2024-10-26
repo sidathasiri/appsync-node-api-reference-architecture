@@ -1,11 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import {
-  AuthorizationType,
-  Definition,
-  GraphqlApi,
-} from 'aws-cdk-lib/aws-appsync';
 import { Construct } from 'constructs';
-import path = require('path');
 import { AppSyncAPI } from './appsync';
 import { DynamoDBTable } from './dynamodb';
 
