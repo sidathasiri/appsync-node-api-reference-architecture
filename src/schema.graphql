@@ -8,7 +8,7 @@ type Query {
 }
 
 type Mutation {
-  createUser(user: User!): UserResponse
+  createUser(user: UserInput!): UserResponse
 }
 
 type UserResponse {
@@ -18,6 +18,11 @@ type UserResponse {
 }
 
 type User {
+  id: String!
+  name: String!
+}
+
+input UserInput {
   id: String!
   name: String!
 }
