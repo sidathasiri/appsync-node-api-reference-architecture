@@ -12,7 +12,8 @@ import {
   Role,
   ServicePrincipal,
 } from "aws-cdk-lib/aws-iam";
-import { CreateUserResolver } from "./resolvers/createUser/resolver";
+import { CreateUserResolver } from "./resolvers/createUserResolver";
+import { GetUserResolver } from "./resolvers/getUserResolver";
 
 interface AppSyncProps {
   apiNameName: string;
@@ -52,10 +53,30 @@ export class AppSyncAPI extends Construct {
       },
     });
 
+    // IAM role for lambda datasource
+    const lambdaDataSourceRole = new Role(this, "DynamoDbFullAccessRole", {
+      assumedBy: new ServicePrincipal("lambda.amazonaws.com"), // This allows Lambda to assume the role
+    });
+
+    lambdaDataSourceRole.addToPolicy(
+      new PolicyStatement({
+        actions: ["dynamodb:*"],
+        resources: ["*"],
+      })
+    );
+
     // Resolver for create user mutation
     new CreateUserResolver(this, "create-user-resolver", {
       appsyncAPI: this.appsyncAPI,
       resolverName: "create-user",
+      role: lambdaDataSourceRole,
+    });
+
+    // Resolver for get user query
+    new GetUserResolver(this, "get-user-resolver", {
+      appsyncAPI: this.appsyncAPI,
+      resolverName: "get-user",
+      role: lambdaDataSourceRole,
     });
   }
 }

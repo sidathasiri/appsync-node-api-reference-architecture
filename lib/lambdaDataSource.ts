@@ -8,40 +8,35 @@ import {
   IGraphqlApi,
   LambdaDataSource,
 } from "aws-cdk-lib/aws-appsync";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { IRole, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
-interface CreateUserDataSourceProps {
+interface LambdaFuncDataSourceProps {
   functionName: string;
   appsyncAPI: IGraphqlApi;
   dataSourceName: string;
+  functionCodeFilePath: string;
+  timeout: number;
+  memory: number;
+  role: IRole;
 }
 
-export class CreateUserDataSource extends Construct {
+export class LambdaFuncDataSource extends Construct {
   lambdaFunction: NodejsFunction;
 
   lambdaDataSource: BaseDataSource;
 
-  constructor(scope: Construct, id: string, props: CreateUserDataSourceProps) {
+  constructor(scope: Construct, id: string, props: LambdaFuncDataSourceProps) {
     super(scope, id);
 
     this.lambdaFunction = new NodejsFunction(this, props.functionName, {
       functionName: props.functionName,
-      entry: join(
-        __dirname,
-        "../../../src/function/user/createUser.handler.ts"
-      ),
+      entry: join(__dirname, `../${props.functionCodeFilePath}`),
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      timeout: cdk.Duration.seconds(5),
-      memorySize: 128,
+      timeout: cdk.Duration.seconds(props.timeout),
+      memorySize: props.memory,
+      role: props.role,
     });
-
-    this.lambdaFunction.addToRolePolicy(
-      new PolicyStatement({
-        actions: ["dynamodb:*"],
-        resources: ["*"],
-      })
-    );
 
     this.lambdaDataSource = new LambdaDataSource(this, props.dataSourceName, {
       api: props.appsyncAPI,
