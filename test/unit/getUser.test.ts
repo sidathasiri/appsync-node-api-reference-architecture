@@ -5,7 +5,7 @@ describe("get user tests", () => {
     const response = await handler();
     expect(response).toStrictEqual({
       success: true,
-      data: { id: "123", name: "John" },
+      data: { id: "123", name: "John Doe" },
     });
   });
 });

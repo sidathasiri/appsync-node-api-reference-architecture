@@ -1,10 +1,10 @@
-name: feature-branch-checks
-run-name: ${{ github.actor }} is running checks on feature branch
+name: pull-request-checks
+run-name: ${{ github.actor }} is running checks on pull request
 on:
   push
 
 jobs:
-  feature-branch-checks:
+  pull-request-checks:
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout repository
