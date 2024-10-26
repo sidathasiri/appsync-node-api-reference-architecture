@@ -29,7 +29,7 @@ export class CreateUserDataSource extends Construct {
         __dirname,
         "../../../src/function/user/createUser.handler.ts"
       ),
-      runtime: Runtime.NODEJS_18_X,
+      runtime: Runtime.NODEJS_20_X,
       handler: "handler",
       timeout: cdk.Duration.seconds(5),
       memorySize: 128,
