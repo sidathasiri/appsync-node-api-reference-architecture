@@ -1,7 +1,4 @@
-import { Handler } from "aws-cdk-lib/aws-lambda";
-
-export const handler: Handler = async () => {
-  console.log("Working!");
+export const handler = async () => {
   return {
     success: true,
     data: {

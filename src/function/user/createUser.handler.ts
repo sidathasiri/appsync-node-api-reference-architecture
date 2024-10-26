@@ -1,12 +1,8 @@
-import { Handler } from "aws-cdk-lib/aws-lambda";
-
-export const handler: Handler = async (event: any) => {
-  console.log("Received event:", JSON.stringify(event));
+export const handler = async (event: any) => {
   return {
     success: true,
     data: {
-      id: "123",
-      name: "John",
+      ...event.arguments.user,
     },
   };
 };
