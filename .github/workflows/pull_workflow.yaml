@@ -26,6 +26,9 @@ jobs:
         id: setup
         run: npm ci
 
+      - name: Unit tests
+        run: npm run test:unit:coverage
+
       - name: Build
         id: build
         run: npm run build
