@@ -8,6 +8,7 @@ import {
   IGraphqlApi,
   LambdaDataSource,
 } from "aws-cdk-lib/aws-appsync";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 interface CreateUserDataSourceProps {
   functionName: string;
@@ -34,6 +35,13 @@ export class CreateUserDataSource extends Construct {
       timeout: cdk.Duration.seconds(5),
       memorySize: 128,
     });
+
+    this.lambdaFunction.addToRolePolicy(
+      new PolicyStatement({
+        actions: ["dynamodb:*"],
+        resources: ["*"],
+      })
+    );
 
     this.lambdaDataSource = new LambdaDataSource(this, props.dataSourceName, {
       api: props.appsyncAPI,
