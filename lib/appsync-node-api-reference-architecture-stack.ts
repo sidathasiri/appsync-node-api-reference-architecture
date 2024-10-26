@@ -1,27 +1,31 @@
-import * as cdk from "aws-cdk-lib";
+import * as cdk from 'aws-cdk-lib';
 import {
   AuthorizationType,
   Definition,
   GraphqlApi,
-} from "aws-cdk-lib/aws-appsync";
-import { Construct } from "constructs";
-import path = require("path");
-import { AppSyncAPI } from "./appsync";
-import { DynamoDBTable } from "./dynamodb";
+} from 'aws-cdk-lib/aws-appsync';
+import { Construct } from 'constructs';
+import path = require('path');
+import { AppSyncAPI } from './appsync';
+import { DynamoDBTable } from './dynamodb';
 
-const apiName = "my-api";
-const tableName = "my-table";
+const apiName = 'my-api';
+const tableName = 'my-table';
 
 export class AppsyncNodeApiReferenceArchitectureStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const api = new AppSyncAPI(this, "appsync-api", {
+    const api = new AppSyncAPI(this, 'appsync-api', {
       apiNameName: apiName,
     });
 
-    const dynamodbTable = new DynamoDBTable(this, "dynamodb-table", {
+    const dynamodbTable = new DynamoDBTable(this, 'dynamodb-table', {
       tableName: tableName,
+    });
+
+    new cdk.CfnOutput(this, 'graphqlEndpoint', {
+      value: api.appsyncAPI.graphqlUrl,
     });
   }
 }

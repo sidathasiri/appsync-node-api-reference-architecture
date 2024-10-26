@@ -9,6 +9,7 @@
     "watch": "tsc -w",
     "test:unit": "jest test/unit",
     "test:unit:coverage": "jest --coverage test/unit",
+    "test:integration": "jest test/integration",
     "cdk": "cdk",
     "clean": "tsc --build --clean",
     "lint": "eslint . --ext .ts"
