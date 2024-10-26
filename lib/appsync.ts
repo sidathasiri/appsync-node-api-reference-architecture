@@ -55,7 +55,13 @@ export class AppSyncAPI extends Construct {
 
     // IAM role for lambda datasource
     const lambdaDataSourceRole = new Role(this, "DynamoDbFullAccessRole", {
-      assumedBy: new ServicePrincipal("lambda.amazonaws.com"), // This allows Lambda to assume the role
+      assumedBy: new ServicePrincipal("lambda.amazonaws.com"),
+      managedPolicies: [
+        {
+          managedPolicyArn:
+            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        },
+      ],
     });
 
     lambdaDataSourceRole.addToPolicy(
