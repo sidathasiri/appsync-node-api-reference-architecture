@@ -5,6 +5,7 @@ class LambdaLogFormatter extends LogFormatter {
   public formatAttributes(attributes: UnformattedAttributes): LogItem {
     const baseAttributes = {
       message: attributes.message,
+      data: attributes.data,
       service: attributes.serviceName,
       environment: attributes.environment,
       awsRegion: attributes.awsRegion,
