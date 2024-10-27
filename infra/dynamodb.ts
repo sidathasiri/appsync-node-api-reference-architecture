@@ -16,7 +16,6 @@ export class DynamoDBTable extends Construct {
       tableName: props.tableName,
       partitionKey: { name: 'pk', type: dynamodb.AttributeType.STRING },
       removalPolicy: cdk.RemovalPolicy.DESTROY,
-      sortKey: { name: 'sk', type: dynamodb.AttributeType.STRING },
       tableClass: dynamodb.TableClass.STANDARD,
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
     };

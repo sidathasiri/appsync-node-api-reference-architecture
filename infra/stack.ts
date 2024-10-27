@@ -15,6 +15,7 @@ export class AppStack extends cdk.Stack {
     const api = new AppSyncAPI(this, `${appName}-appsync-api`, {
       apiNameName: appName,
       table: dynamodbTable.table,
+      region: props?.env?.region ?? 'us-east-1',
     });
 
     new cdk.CfnOutput(this, 'graphqlEndpoint', {

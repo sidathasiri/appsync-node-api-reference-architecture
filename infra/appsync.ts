@@ -22,6 +22,7 @@ import { Table } from 'aws-cdk-lib/aws-dynamodb';
 interface AppSyncProps {
   apiNameName: string;
   table: Table;
+  region: string;
 }
 
 export class AppSyncAPI extends Construct {
@@ -97,6 +98,7 @@ export class AppSyncAPI extends Construct {
       role: lambdaDataSourceRole,
       envVariables: {
         TABLE_NAME: props.table.tableName,
+        REGION: props.region,
       },
     });
 
@@ -107,6 +109,7 @@ export class AppSyncAPI extends Construct {
       role: lambdaDataSourceRole,
       envVariables: {
         TABLE_NAME: props.table.tableName,
+        REGION: props.region,
       },
     });
   }
