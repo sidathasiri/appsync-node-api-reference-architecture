@@ -21,5 +21,9 @@ export class AppsyncNodeApiReferenceArchitectureStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'graphqlEndpoint', {
       value: api.appsyncAPI.graphqlUrl,
     });
+
+    new cdk.CfnOutput(this, 'dynamoDBTableName', {
+      value: dynamodbTable.table.tableName,
+    });
   }
 }

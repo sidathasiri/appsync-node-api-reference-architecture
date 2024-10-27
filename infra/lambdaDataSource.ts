@@ -1,14 +1,14 @@
-import { Construct } from "constructs";
-import * as cdk from "aws-cdk-lib";
-import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { join } from "path";
-import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import { Construct } from 'constructs';
+import * as cdk from 'aws-cdk-lib';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { join } from 'path';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import {
   BaseDataSource,
   IGraphqlApi,
   LambdaDataSource,
-} from "aws-cdk-lib/aws-appsync";
-import { IRole, PolicyStatement } from "aws-cdk-lib/aws-iam";
+} from 'aws-cdk-lib/aws-appsync';
+import { IRole } from 'aws-cdk-lib/aws-iam';
 
 interface LambdaFuncDataSourceProps {
   functionName: string;
@@ -32,7 +32,7 @@ export class LambdaFuncDataSource extends Construct {
       functionName: props.functionName,
       entry: join(__dirname, `../${props.functionCodeFilePath}`),
       runtime: Runtime.NODEJS_20_X,
-      handler: "handler",
+      handler: 'handler',
       timeout: cdk.Duration.seconds(props.timeout),
       memorySize: props.memory,
       role: props.role,

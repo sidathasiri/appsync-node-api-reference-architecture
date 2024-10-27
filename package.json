@@ -1,8 +1,8 @@
 {
   "name": "appsync-node-api-reference-architecture",
   "version": "0.1.0",
-  "bin": {
-    "appsync-node-api-reference-architecture": "bin/appsync-node-api-reference-architecture.js"
+  "infra": {
+    "appsync-node-api-reference-architecture": "infra/index.js"
   },
   "scripts": {
     "build": "tsc",
