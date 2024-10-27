@@ -16,16 +16,24 @@ export const handler = async (event: { arguments: { user: User } }) => {
     JSON.stringify(event)
   );
 
-  await dynamoConnector.createItem({
-    pk: user.id,
-    id: user.id,
-    name: user.name,
-  });
+  try {
+    await dynamoConnector.createItem({
+      pk: user.id,
+      id: user.id,
+      name: user.name,
+    });
 
-  return {
-    success: true,
-    data: {
-      ...user,
-    },
-  };
+    return {
+      success: true,
+      data: {
+        ...user,
+      },
+    };
+  } catch (e) {
+    console.log('Internal error:', e);
+    return {
+      success: false,
+      error: 'Internal server error',
+    };
+  }
 };

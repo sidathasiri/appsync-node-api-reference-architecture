@@ -11,23 +11,30 @@ const dynamoConnector = new DynamoDBConnector(REGION, TABLE_NAME);
 export const handler = async (event: { arguments: { id: string } }) => {
   console.log('Get user request received');
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const response = await dynamoConnector.getItemByKey(event.arguments.id);
+  try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const response = await dynamoConnector.getItemByKey(event.arguments.id);
 
-  if (!response) {
+    if (!response) {
+      return {
+        success: false,
+        error: 'User not found',
+      };
+    }
+
+    const { pk, ...bodyWithoutKeys } = response;
+
+    return {
+      success: true,
+      data: {
+        ...bodyWithoutKeys,
+      },
+    };
+  } catch (e) {
     return {
       success: false,
-      error: 'User not found',
+      error: 'Internal server error',
     };
   }
-
-  const { pk, ...bodyWithoutKeys } = response;
-
-  return {
-    success: true,
-    data: {
-      ...bodyWithoutKeys,
-    },
-  };
 };
