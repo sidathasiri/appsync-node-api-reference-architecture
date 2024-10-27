@@ -4,7 +4,7 @@ schema {
 }
 
 type Query {
-  getUser(id: String): UserResponse
+  getUser(id: String!): UserResponse
 }
 
 type Mutation {
