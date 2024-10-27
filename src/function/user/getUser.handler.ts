@@ -1,4 +1,6 @@
+import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBConnector } from '../../connector/dynamodb';
+import getLogger from '../../internal/logger';
 
 const { REGION, TABLE_NAME } = process.env;
 
@@ -6,10 +8,14 @@ if (!REGION || !TABLE_NAME) {
   throw new Error('Required environment variables not found');
 }
 
+const logger: Logger = getLogger('get-user-handler');
 const dynamoConnector = new DynamoDBConnector(REGION, TABLE_NAME);
 
 export const handler = async (event: { arguments: { id: string } }) => {
-  console.log('Get user request received');
+  logger.info({
+    message: 'Get user request received',
+    data: { id: event.arguments.id },
+  });
 
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -17,6 +23,10 @@ export const handler = async (event: { arguments: { id: string } }) => {
     const response = await dynamoConnector.getItemByKey(event.arguments.id);
 
     if (!response) {
+      logger.warn({
+        message: 'User not found',
+        data: { id: event.arguments.id },
+      });
       return {
         success: false,
         error: 'User not found',
@@ -24,6 +34,10 @@ export const handler = async (event: { arguments: { id: string } }) => {
     }
 
     const { pk, ...bodyWithoutKeys } = response;
+    logger.info({
+      message: 'User found',
+      data: { user: response },
+    });
 
     return {
       success: true,
@@ -32,6 +46,10 @@ export const handler = async (event: { arguments: { id: string } }) => {
       },
     };
   } catch (e) {
+    logger.error({
+      message: 'Internal server error',
+      data: { error: e },
+    });
     return {
       success: false,
       error: 'Internal server error',
