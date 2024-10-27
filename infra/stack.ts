@@ -8,12 +8,13 @@ export class AppStack extends cdk.Stack {
     super(scope, id, props);
     const appName = props?.stackName ?? 'appsync-node-api';
 
-    const api = new AppSyncAPI(this, appName, {
-      apiNameName: appName,
+    const dynamodbTable = new DynamoDBTable(this, `${appName}-table`, {
+      tableName: appName,
     });
 
-    const dynamodbTable = new DynamoDBTable(this, appName, {
-      tableName: appName,
+    const api = new AppSyncAPI(this, `${appName}-appsync-api`, {
+      apiNameName: appName,
+      table: dynamodbTable.table,
     });
 
     new cdk.CfnOutput(this, 'graphqlEndpoint', {

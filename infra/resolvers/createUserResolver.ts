@@ -7,7 +7,10 @@ import { LambdaFuncDataSource } from '../lambdaDataSource';
 interface CreateUserResolverProps {
   appsyncAPI: IGraphqlApi;
   resolverName: string;
-  role: IRole;
+  role?: IRole;
+  envVariables?: {
+    [key: string]: string;
+  };
 }
 
 export class CreateUserResolver extends Construct {
@@ -25,6 +28,7 @@ export class CreateUserResolver extends Construct {
         memory: 128,
         timeout: 5,
         role: props.role,
+        envVariables: props.envVariables,
       }
     );
 

@@ -16,8 +16,11 @@ interface LambdaFuncDataSourceProps {
   dataSourceName: string;
   functionCodeFilePath: string;
   timeout: number;
-  memory: number;
-  role: IRole;
+  memory?: number;
+  role?: IRole;
+  envVariables?: {
+    [key: string]: string;
+  };
 }
 
 export class LambdaFuncDataSource extends Construct {
@@ -36,6 +39,7 @@ export class LambdaFuncDataSource extends Construct {
       timeout: cdk.Duration.seconds(props.timeout),
       memorySize: props.memory,
       role: props.role,
+      environment: props.envVariables,
     });
 
     this.lambdaDataSource = new LambdaDataSource(this, props.dataSourceName, {

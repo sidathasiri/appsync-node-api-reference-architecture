@@ -6,7 +6,7 @@ import { AppStack } from './stack';
 const appName = 'ref-architecture';
 
 const app = new cdk.App();
-new AppStack(app, appName, {
+new AppStack(app, `${appName}-app`, {
   stackName: appName,
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,

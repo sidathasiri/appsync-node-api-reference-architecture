@@ -7,6 +7,9 @@ interface GetUserResolverProps {
   appsyncAPI: IGraphqlApi;
   resolverName: string;
   role: IRole;
+  envVariables?: {
+    [key: string]: string;
+  };
 }
 
 export class GetUserResolver extends Construct {
@@ -21,6 +24,7 @@ export class GetUserResolver extends Construct {
       memory: 128,
       timeout: 5,
       role: props.role,
+      envVariables: props.envVariables,
     });
 
     new Resolver(this, 'get-user-resolver', {

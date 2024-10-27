@@ -17,9 +17,11 @@ import { GetUserResolver } from './resolvers/getUserResolver';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Duration } from 'aws-cdk-lib';
+import { Table } from 'aws-cdk-lib/aws-dynamodb';
 
 interface AppSyncProps {
   apiNameName: string;
+  table: Table;
 }
 
 export class AppSyncAPI extends Construct {
@@ -70,7 +72,7 @@ export class AppSyncAPI extends Construct {
       },
     });
 
-    // IAM role for lambda datasource
+    // IAM role for lambda data source
     const lambdaDataSourceRole = new Role(this, 'DynamoDbFullAccessRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
       managedPolicies: [
@@ -84,7 +86,7 @@ export class AppSyncAPI extends Construct {
     lambdaDataSourceRole.addToPolicy(
       new PolicyStatement({
         actions: ['dynamodb:*'],
-        resources: ['*'],
+        resources: [props.table.tableArn],
       })
     );
 
@@ -93,6 +95,9 @@ export class AppSyncAPI extends Construct {
       appsyncAPI: this.appsyncAPI,
       resolverName: 'create-user',
       role: lambdaDataSourceRole,
+      envVariables: {
+        TABLE_NAME: props.table.tableName,
+      },
     });
 
     // Resolver for get user query
@@ -100,6 +105,9 @@ export class AppSyncAPI extends Construct {
       appsyncAPI: this.appsyncAPI,
       resolverName: 'get-user',
       role: lambdaDataSourceRole,
+      envVariables: {
+        TABLE_NAME: props.table.tableName,
+      },
     });
   }
 }
