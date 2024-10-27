@@ -3,19 +3,17 @@ import { Construct } from 'constructs';
 import { AppSyncAPI } from './appsync';
 import { DynamoDBTable } from './dynamodb';
 
-const apiName = 'my-api';
-const tableName = 'my-table';
-
-export class AppsyncNodeApiReferenceArchitectureStack extends cdk.Stack {
+export class AppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+    const appName = props?.stackName ?? 'appsync-node-api';
 
-    const api = new AppSyncAPI(this, 'appsync-api', {
-      apiNameName: apiName,
+    const api = new AppSyncAPI(this, appName, {
+      apiNameName: appName,
     });
 
-    const dynamodbTable = new DynamoDBTable(this, 'dynamodb-table', {
-      tableName: tableName,
+    const dynamodbTable = new DynamoDBTable(this, appName, {
+      tableName: appName,
     });
 
     new cdk.CfnOutput(this, 'graphqlEndpoint', {
