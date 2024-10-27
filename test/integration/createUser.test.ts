@@ -18,7 +18,7 @@ describe('create user integration tests', () => {
       .send({
         query: `
           mutation {
-            createUser(user: {id: "123", name: "123"}) {
+            createUser(user: {id: "1", name: "John Doe"}) {
               data {
                 id
                 name
@@ -50,7 +50,7 @@ describe('create user integration tests', () => {
       .send({
         query: `
           mutation {
-            createUser(user: {id: "123", name: "123"}) {
+            createUser(user: {id: "1", name: "John Doe"}) {
               data {
                 id
                 name
@@ -67,11 +67,11 @@ describe('create user integration tests', () => {
         const responseBody = res.body.data.createUser;
         expect(responseBody.error).toBeNull();
         expect(responseBody.success).toBeTruthy();
-        expect(responseBody.data).toStrictEqual({ id: '123', name: '123' });
+        expect(responseBody.data).toStrictEqual({ id: '1', name: 'John Doe' });
       });
   });
 });
 
 afterAll(async () => {
-  await dynamoDBConnector.deleteItemByKey('123');
+  await dynamoDBConnector.deleteItemByKey('1');
 });

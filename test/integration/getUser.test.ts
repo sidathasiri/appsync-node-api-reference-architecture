@@ -10,9 +10,9 @@ beforeAll(async () => {
   configs = getConfigurations();
   dynamoDBConnector = new DynamoDBConnector(configs.region, configs.tableName);
   dynamoDBConnector.createItem({
-    pk: '123',
-    id: '123',
-    name: 'John Doe',
+    pk: '2',
+    id: '2',
+    name: 'Jane Doe',
   });
 });
 
@@ -23,7 +23,7 @@ describe('get user integration tests', () => {
       .send({
         query: `
           query {
-            getUser(id: "123") {
+            getUser(id: "2") {
               data {
                 id
                 name
@@ -54,7 +54,7 @@ describe('get user integration tests', () => {
       .send({
         query: `
           query {
-            getUser(id: "123") {
+            getUser(id: "2") {
               data {
                 id
                 name
@@ -72,13 +72,13 @@ describe('get user integration tests', () => {
         expect(responseBody.error).toBeNull();
         expect(responseBody.success).toBeTruthy();
         expect(responseBody.data).toStrictEqual({
-          id: '123',
-          name: 'John Doe',
+          id: '2',
+          name: 'Jane Doe',
         });
       });
   });
 });
 
 afterAll(async () => {
-  await dynamoDBConnector.deleteItemByKey('123');
+  await dynamoDBConnector.deleteItemByKey('2');
 });
