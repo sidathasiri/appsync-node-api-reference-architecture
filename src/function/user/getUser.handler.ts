@@ -13,14 +13,21 @@ export const handler = async (event: { arguments: { id: string } }) => {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const { pk, ...bodyWithoutPk } = await dynamoConnector.getItemByKey(
-    event.arguments.id
-  );
+  const response = await dynamoConnector.getItemByKey(event.arguments.id);
+
+  if (!response) {
+    return {
+      success: false,
+      error: 'User not found',
+    };
+  }
+
+  const { pk, ...bodyWithoutKeys } = response;
 
   return {
     success: true,
     data: {
-      ...bodyWithoutPk,
+      ...bodyWithoutKeys,
     },
   };
 };
