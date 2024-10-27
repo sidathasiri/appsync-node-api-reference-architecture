@@ -1,8 +1,14 @@
 import { LogFormatter, LogItem } from '@aws-lambda-powertools/logger';
-import type { UnformattedAttributes } from '@aws-lambda-powertools/logger/types';
+import type {
+  LogAttributes,
+  UnformattedAttributes,
+} from '@aws-lambda-powertools/logger/types';
 
 class LambdaLogFormatter extends LogFormatter {
-  public formatAttributes(attributes: UnformattedAttributes): LogItem {
+  public formatAttributes(
+    attributes: UnformattedAttributes,
+    additionalLogAttributes: LogAttributes
+  ): LogItem {
     const baseAttributes = {
       message: attributes.message,
       data: attributes.data,
@@ -21,7 +27,9 @@ class LambdaLogFormatter extends LogFormatter {
       timestamp: attributes.timestamp,
     };
 
-    return new LogItem({ attributes: baseAttributes });
+    const logItem = new LogItem({ attributes: baseAttributes });
+    logItem.addAttributes(additionalLogAttributes);
+    return logItem;
   }
 }
 
