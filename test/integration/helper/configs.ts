@@ -2,6 +2,8 @@ import * as configs from '../../../cdk-outputs.json';
 
 export type ConfigurationsType = {
   graphqlEndpoint: string;
+  region: string;
+  tableName: string;
 };
 
 export const getConfigurations = (): ConfigurationsType => {

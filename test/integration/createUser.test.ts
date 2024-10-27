@@ -1,11 +1,14 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import request from 'supertest';
 import { ConfigurationsType, getConfigurations } from './helper/configs';
+import { DynamoDBConnector } from '../../src/connector/dynamodb';
 
 let configs: ConfigurationsType;
+let dynamoDBConnector: DynamoDBConnector;
 
 beforeAll(async () => {
   configs = getConfigurations();
+  dynamoDBConnector = new DynamoDBConnector(configs.region, configs.tableName);
 });
 
 describe('create user integration tests', () => {
@@ -67,4 +70,8 @@ describe('create user integration tests', () => {
         expect(responseBody.data).toStrictEqual({ id: '123', name: '123' });
       });
   });
+});
+
+afterAll(async () => {
+  await dynamoDBConnector.deleteItemByKey('123');
 });

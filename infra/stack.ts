@@ -22,8 +22,12 @@ export class AppStack extends cdk.Stack {
       value: api.appsyncAPI.graphqlUrl,
     });
 
-    new cdk.CfnOutput(this, 'dynamoDBTableName', {
+    new cdk.CfnOutput(this, 'tableName', {
       value: dynamodbTable.table.tableName,
+    });
+
+    new cdk.CfnOutput(this, 'region', {
+      value: props?.env?.region ?? 'us-east-1',
     });
   }
 }
