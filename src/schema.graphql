@@ -1,6 +1,7 @@
 schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }
 
 type Query {
@@ -9,6 +10,11 @@ type Query {
 
 type Mutation {
   createUser(user: UserInput!): UserResponse
+}
+
+type Subscription {
+  createdUser: UserResponse
+  @aws_subscribe(mutations: ["createUser"])
 }
 
 type UserResponse {
