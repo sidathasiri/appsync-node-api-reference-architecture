@@ -18,8 +18,6 @@ export const handler = async (event: { arguments: { id: string } }) => {
   });
 
   try {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const response = await dynamoConnector.getItemByKey(event.arguments.id);
 
     if (!response) {

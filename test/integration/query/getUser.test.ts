@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import request from 'supertest';
-import { ConfigurationsType, getConfigurations } from './helper/configs';
-import { DynamoDBConnector } from '../../src/connector/dynamodb';
+import { ConfigurationsType, getConfigurations } from '../helper/configs';
+import { DynamoDBConnector } from '../../../src/connector/dynamodb';
 
 let configs: ConfigurationsType;
 let dynamoDBConnector: DynamoDBConnector;
@@ -9,16 +9,21 @@ let dynamoDBConnector: DynamoDBConnector;
 beforeAll(async () => {
   configs = getConfigurations();
   dynamoDBConnector = new DynamoDBConnector(configs.region, configs.tableName);
+  dynamoDBConnector.createItem({
+    pk: '2',
+    id: '2',
+    name: 'Jane Doe',
+  });
 });
 
-describe('create user integration tests', () => {
+describe('get user integration tests', () => {
   it('should throw error for invalid token', async () => {
     await request(configs.graphqlEndpoint)
       .post('/')
       .send({
         query: `
-          mutation {
-            createUser(user: {id: "1", name: "John Doe"}) {
+          query {
+            getUser(id: "2") {
               data {
                 id
                 name
@@ -43,14 +48,13 @@ describe('create user integration tests', () => {
         });
       });
   });
-
-  it('should create the user correctly', async () => {
+  it('should return the user correctly', async () => {
     await request(configs.graphqlEndpoint)
       .post('/')
       .send({
         query: `
-          mutation {
-            createUser(user: {id: "1", name: "John Doe"}) {
+          query {
+            getUser(id: "2") {
               data {
                 id
                 name
@@ -64,14 +68,17 @@ describe('create user integration tests', () => {
       .set({ Authorization: 'valid-token' })
       .expect(200)
       .then((res) => {
-        const responseBody = res.body.data.createUser;
+        const responseBody = res.body.data.getUser;
         expect(responseBody.error).toBeNull();
         expect(responseBody.success).toBeTruthy();
-        expect(responseBody.data).toStrictEqual({ id: '1', name: 'John Doe' });
+        expect(responseBody.data).toStrictEqual({
+          id: '2',
+          name: 'Jane Doe',
+        });
       });
   });
 });
 
 afterAll(async () => {
-  await dynamoDBConnector.deleteItemByKey('1');
+  await dynamoDBConnector.deleteItemByKey('2');
 });
