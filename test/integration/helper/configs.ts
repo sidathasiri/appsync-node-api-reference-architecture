@@ -11,5 +11,7 @@ export const getConfigurations = (): ConfigurationsType => {
     throw new Error('No CDK configs found from the cdk-outputs.json file');
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return Object.values(configs)[0];
 };
